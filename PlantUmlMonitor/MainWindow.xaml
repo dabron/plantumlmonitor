@@ -5,10 +5,39 @@
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:PlantUmlMonitor"
 		mc:Ignorable="d"
-		Title="MainWindow"
-		Height="350"
-		Width="525"
+		FontSize="16"
+		Title="Plant UML Monitor"
 		>
-	<Grid>
+	<Window.Resources>
+		<Style TargetType="TextBlock">
+			<Setter Property="Margin" Value="4"/>
+		</Style>
+		<Style TargetType="TextBox">
+			<Setter Property="Margin" Value="4"/>
+		</Style>
+		<Style TargetType="Button">
+			<Setter Property="Margin" Value="4"/>
+			<Setter Property="Padding" Value="4,0"/>
+		</Style>
+		<Style TargetType="Image">
+			<Setter Property="Margin" Value="4"/>
+		</Style>
+	</Window.Resources>
+	<Grid Margin="4">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Column="0" Text="Path:"/>
+			<TextBox Grid.Column="1" IsReadOnly="True"/>
+			<Button Grid.Column="2" Content="..."/>
+		</Grid>
+		<Image Grid.Row="1"/>
 	</Grid>
 </Window>
