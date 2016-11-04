@@ -1,5 +1,9 @@
 ﻿using Microsoft.Win32;
+using System;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace PlantUmlMonitor
 {
@@ -17,7 +21,10 @@ namespace PlantUmlMonitor
 				Filter = "Plant UML files (*.uml, *.txt)|*.uml;*.txt"
 			};
 			dialog.ShowDialog();
-			PathBox.Text = dialog.FileName;
+			string path = PathBox.Text = dialog.FileName;
+			using (var p = Process.Start(new ProcessStartInfo("plantuml.exe", path){WindowStyle = ProcessWindowStyle.Hidden}))
+				p.WaitForExit();
+			GraphImage.Source = new BitmapImage(new Uri(Path.ChangeExtension(path, ".png")));
 		}
 	}
 }

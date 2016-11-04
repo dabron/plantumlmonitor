@@ -38,6 +38,6 @@
 			<TextBox Grid.Column="1" Name="PathBox" IsReadOnly="True"/>
 			<Button Grid.Column="2" Content="..." Click="Button_Click"/>
 		</Grid>
-		<Image Grid.Row="1"/>
+		<Image Grid.Row="1" Name="GraphImage" Stretch="None"/>
 	</Grid>
 </Window>
