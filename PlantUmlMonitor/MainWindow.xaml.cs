@@ -14,7 +14,7 @@ namespace PlantUmlMonitor
 		{
 			var dialog = new OpenFileDialog()
 			{
-				Filter = "Plant UML Files (*.uml, *.txt);*.uml;*.txt"
+				Filter = "Plant UML files (*.uml, *.txt)|*.uml;*.txt"
 			};
 			dialog.ShowDialog();
 			PathBox.Text = dialog.FileName;
