@@ -35,8 +35,8 @@
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
 			<TextBlock Grid.Column="0" Text="Path:"/>
-			<TextBox Grid.Column="1" IsReadOnly="True"/>
-			<Button Grid.Column="2" Content="..."/>
+			<TextBox Grid.Column="1" Name="PathBox" IsReadOnly="True"/>
+			<Button Grid.Column="2" Content="..." Click="Button_Click"/>
 		</Grid>
 		<Image Grid.Row="1"/>
 	</Grid>
