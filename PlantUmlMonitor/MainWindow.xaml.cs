@@ -19,6 +19,7 @@ namespace PlantUmlMonitor
 			_lock = new object();
 			ResetLastGenerated();
 			InitializeComponent();
+			SetWorking(false);
 		}
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -47,7 +48,10 @@ namespace PlantUmlMonitor
 								GenerateImage(path);
 						}
 					}
-					catch { }
+					catch
+					{
+						SetWorking(false);
+					}
 					Thread.Sleep(100);
 				}
 			}).Start();
@@ -77,8 +81,26 @@ namespace PlantUmlMonitor
 			}
 		}
 
+		private void SetWorking(bool working)
+		{
+			Dispatcher.Invoke(() =>
+			{
+				if (working)
+				{
+					WorkingBar.Visibility = Visibility.Visible;
+					WorkingBar.IsIndeterminate = true;
+				}
+				else
+				{
+					WorkingBar.Visibility = Visibility.Hidden;
+					WorkingBar.IsIndeterminate = false;
+				}
+			});
+		}
+
 		private void GenerateImage(string path)
 		{
+			SetWorking(true);
 			using (var p = Process.Start(new ProcessStartInfo("plantuml.exe", path) { WindowStyle = ProcessWindowStyle.Hidden }))
 				p.WaitForExit();
 			Dispatcher.Invoke(() =>
@@ -91,6 +113,7 @@ namespace PlantUmlMonitor
 				source.EndInit();
 				GraphImage.Source = source;
 			});
+			SetWorking(false);
 		}
 	}
 }
