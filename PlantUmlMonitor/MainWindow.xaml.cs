@@ -12,10 +12,12 @@ namespace PlantUmlMonitor
 	public partial class MainWindow : Window
 	{
 		private readonly object _lock;
+		private DateTime _lastGenerated;
 
 		public MainWindow()
 		{
 			_lock = new object();
+			ResetLastGenerated();
 			InitializeComponent();
 		}
 
@@ -23,7 +25,6 @@ namespace PlantUmlMonitor
 		{
 			new Task(() =>
 			{
-				var lastGenerated = DateTime.MinValue;
 				while (true)
 				{
 					try
@@ -36,10 +37,10 @@ namespace PlantUmlMonitor
 							lock (_lock)
 							{
 								var lastChanged = File.GetLastWriteTime(path);
-								if (lastChanged > lastGenerated)
+								if (lastChanged > _lastGenerated)
 								{
 									changed = true;
-									lastGenerated = lastChanged;
+									_lastGenerated = lastChanged;
 								}
 							}
 							if (changed)
@@ -59,7 +60,21 @@ namespace PlantUmlMonitor
 				Filter = "Plant UML files (*.uml, *.txt)|*.uml;*.txt"
 			};
 			dialog.ShowDialog();
-			PathBox.Text = dialog.FileName;
+			SetPath(dialog.FileName);
+		}
+
+		private void ResetLastGenerated()
+		{
+			_lastGenerated = DateTime.MinValue;
+		}
+
+		private void SetPath(string path)
+		{
+			lock (_lock)
+			{
+				PathBox.Text = path;
+				ResetLastGenerated();
+			}
 		}
 
 		private void GenerateImage(string path)
