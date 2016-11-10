@@ -6,6 +6,10 @@
 		xmlns:local="clr-namespace:PlantUmlMonitor"
 		mc:Ignorable="d"
 		FontSize="16"
+		MinHeight="320"
+		MinWidth="320"
+		Height="480"
+		Width="640"
 		Title="Plant UML Monitor"
 		Loaded="Window_Loaded"
 		>
