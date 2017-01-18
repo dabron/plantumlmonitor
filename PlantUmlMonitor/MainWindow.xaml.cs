@@ -48,8 +48,9 @@ namespace PlantUmlMonitor
 								GenerateImage(path);
 						}
 					}
-					catch
+					catch (Exception ex)
 					{
+						SetError(ex.Message);
 						SetWorking(false);
 					}
 					Thread.Sleep(100);
@@ -98,11 +99,35 @@ namespace PlantUmlMonitor
 			});
 		}
 
+		private void SetError(string message)
+		{
+			Dispatcher.Invoke(() =>
+			{
+				if (string.IsNullOrEmpty(message))
+				{
+					ErrorBox.Visibility = Visibility.Hidden;
+					ScrollViewer.Visibility = Visibility.Visible;
+				}
+				else
+				{
+					ScrollViewer.Visibility = Visibility.Hidden;
+					ErrorBox.Text = message;
+					ErrorBox.Visibility = Visibility.Visible;
+				}
+			});
+		}
+
 		private void GenerateImage(string path)
 		{
 			SetWorking(true);
-			using (var p = Process.Start(new ProcessStartInfo("plantuml.exe", path) { WindowStyle = ProcessWindowStyle.Hidden }))
+			var startInfo = new ProcessStartInfo("plantuml.exe", path) { WindowStyle = ProcessWindowStyle.Hidden };
+			using (var p = new Process() { StartInfo = startInfo })
+			{
+				p.Start();
 				p.WaitForExit();
+				if (p.ExitCode != 0)
+					throw new Exception("Exited with error code " + p.ExitCode);
+			}
 			Dispatcher.Invoke(() =>
 			{
 				var source = new BitmapImage();
@@ -113,6 +138,7 @@ namespace PlantUmlMonitor
 				source.EndInit();
 				GraphImage.Source = source;
 			});
+			SetError(string.Empty);
 			SetWorking(false);
 		}
 	}
